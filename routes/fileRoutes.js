@@ -8,19 +8,21 @@ const router = express.Router();
 // 設定 Multer 儲存空間
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../uploads'));
+        cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-        const encodedName = Buffer.from(file.originalname, 'latin1').toString('utf8');
-        cb(null, encodedName);
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const originalName = decodeURIComponent(Buffer.from(file.originalname, 'latin1').toString('utf8'));
+        const sanitizedName = originalName.replace(/[^a-zA-Z0-9.-]/g, '_');
+        cb(null, `${uniqueSuffix}-${sanitizedName}`);
     }
 });
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 // 路由設定
 router.post('/upload/check', fileController.checkFile);
 router.post('/upload', fileController.uploadFiles);
-router.put('/files/:fileName', upload.single('file'), fileController.updateFile);
+router.put('/files/:id', upload.single('file'), fileController.updateFile);
 router.get('/files', fileController.getFileList);
 router.get('/download/:filename', fileController.downloadFile);
 router.delete('/files/:id', fileController.deleteFile);

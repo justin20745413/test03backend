@@ -215,22 +215,69 @@ const fileController = {
     // 更新檔案
     updateFile: async (req, res) => {
         try {
-            const { fileName } = req.params
-            const file = req.file
+            const { id } = req.params
+            const { originalName, uploadDate, status } = req.body
+            const newFile = req.file
+            const logPath = path.join(__dirname, '../uploadLog.json')
 
-            const index = files.findIndex(f => f.fileName === fileName)
-            if (index !== -1) {
-                files[index] = {
-                    ...files[index],
-                    fileName: file.filename,
-                    fileSize: file.size,
-                    uploadDate: new Date().toISOString()
+            // 讀取日誌文件
+            const logContent = await fs.readFile(logPath, 'utf8')
+            let logs = JSON.parse(logContent)
+
+            // 查找要更新的檔案
+            const fileIndex = logs.findIndex(f => f.id === parseInt(id))
+            
+            if (fileIndex === -1) {
+                return res.status(404).json({
+                    success: false,
+                    error: '找不到檔案'
+                })
+            }
+
+            const oldFile = logs[fileIndex]
+
+            // 如果有新檔案，刪除舊檔案並保存新檔案
+            if (newFile) {
+                const oldFilePath = path.join(__dirname, '../uploads', oldFile.fileName)
+                try {
+                    await fs.unlink(oldFilePath)
+                } catch (error) {
+                    console.error('刪除舊檔案失敗:', error)
+                }
+
+                logs[fileIndex] = {
+                    ...oldFile,
+                    fileName: newFile.filename,
+                    originalName: originalName || oldFile.originalName,
+                    fileSize: newFile.size,
+                    fileType: path.extname(newFile.filename).slice(1),
+                    uploadDate: uploadDate || new Date().toISOString(),
+                    status: status || oldFile.status
+                }
+            } else {
+                // 只更新檔案資訊
+                logs[fileIndex] = {
+                    ...oldFile,
+                    originalName: originalName || oldFile.originalName,
+                    uploadDate: uploadDate || oldFile.uploadDate,
+                    status: status || oldFile.status
                 }
             }
 
-            res.json(files[index])
+            // 保存更新後的日誌
+            await fs.writeFile(logPath, JSON.stringify(logs, null, 2), 'utf8')
+
+            res.json({
+                success: true,
+                file: logs[fileIndex]
+            })
         } catch (error) {
-            res.status(500).json({ error: '更新檔案失敗' })
+            console.error('更新檔案失敗:', error)
+            res.status(500).json({
+                success: false,
+                error: '更新檔案失敗',
+                detail: error.message
+            })
         }
     },
 
