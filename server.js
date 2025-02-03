@@ -11,9 +11,6 @@ app.use(cors({
         'http://localhost:5173',
         'http://localhost:5174',
         'https://justin20745413.github.io',
-        'http://localhost:5173/test03',
-        'https://justin20745413.github.io/test03',
-        'https://test03-frontend.onrender.com'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
