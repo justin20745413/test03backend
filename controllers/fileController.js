@@ -108,7 +108,7 @@ const fileController = {
             try {
                 await fs.unlink(lockFile);
             } catch (error) {
-                console.error('釋放鎖失敗:', error);
+                console.error('失敗:', error);
             }
         };
 
