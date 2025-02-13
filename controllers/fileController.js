@@ -40,10 +40,15 @@ const ensureFile = async (filePath, defaultContent = '[]') => {
 const initializeSystem = async () => {
     const baseDir = path.join(__dirname, '..');
     const uploadsDir = path.join(baseDir, 'uploads');
-    const logFile = path.join(baseDir, 'uploadLog.json');
+    const dataDir = path.join(baseDir, 'data');
+    const logFile = path.join(dataDir, 'uploadLog.json');
 
     try {
+        // 確保 data 目錄存在
+        await ensureDir(dataDir);
+        // 確保上傳目錄存在
         await ensureDir(uploadsDir);
+        // 確保日誌文件存在
         await ensureFile(logFile, '[]');
         console.log('系統初始化成功');
     } catch (error) {
@@ -91,8 +96,8 @@ const fileController = {
 
     // 上傳檔案
     uploadFiles: async (req, res) => {
-        const logPath = path.join(__dirname, '../uploadLog.json');
-        const lockFile = path.join(__dirname, '../upload.lock');
+        const logPath = path.join(__dirname, '../data/uploadLog.json');
+        const lockFile = path.join(__dirname, '../data/upload.lock');
         
         // 使用文件鎖來確保同步處理
         const acquireLock = async () => {
@@ -218,7 +223,7 @@ const fileController = {
             const { id } = req.params
             const { originalName, uploadDate, status } = req.body
             const newFile = req.file
-            const logPath = path.join(__dirname, '../uploadLog.json')
+            const logPath = path.join(__dirname, '../data/uploadLog.json')
 
             // 讀取日誌文件
             const logContent = await fs.readFile(logPath, 'utf8')
@@ -289,7 +294,7 @@ const fileController = {
             const sortBy = req.query.sortBy || 'id'
             const sortOrder = req.query.sortOrder || 'desc'
             
-            const logPath = path.join(__dirname, '../uploadLog.json')
+            const logPath = path.join(__dirname, '../data/uploadLog.json')
             
             // 讀取並驗證 JSON 文件
             let logContent
@@ -372,7 +377,7 @@ const fileController = {
             const { id } = req.params
             const page = parseInt(req.query.page) || 1
             const perPage = parseInt(req.query.perPage) || 7
-            const logPath = path.join(__dirname, '../uploadLog.json')
+            const logPath = path.join(__dirname, '../data/uploadLog.json')
             
             // 讀取日誌文件
             const logContent = await fs.readFile(logPath, 'utf8')

@@ -1,0 +1,45 @@
+{
+  "webColor": "COLOR_C",
+  "indexPartList": [
+    {
+      "indexPartId": 1,
+      "indexPartType": "CAROUSEL",
+      "status": "ENABLE",
+      "customName": "首頁輪播",
+      "indexPartStyle": "STYLE_B",
+      "isCentral": false
+    },
+    {
+      "indexPartId": 2,
+      "indexPartType": "IMAGE_CARD",
+      "status": "ENABLE",
+      "customName": "圖片專區",
+      "indexPartStyle": "STYLE_B",
+      "isCentral": false
+    },
+    {
+      "indexPartId": 3,
+      "indexPartType": "CALENDAR",
+      "status": "ENABLE",
+      "customName": "活動日曆",
+      "indexPartStyle": "STYLE_A",
+      "isCentral": false
+    },
+    {
+      "indexPartId": 4,
+      "indexPartType": "BULLETIN",
+      "status": "ENABLE",
+      "customName": "最新消息",
+      "indexPartStyle": "STYLE_B",
+      "isCentral": false
+    },
+    {
+      "indexPartId": 5,
+      "indexPartType": "POLICY",
+      "status": "ENABLE",
+      "customName": "宣傳服務",
+      "indexPartStyle": "STYLE_B",
+      "isCentral": false
+    }
+  ]
+}

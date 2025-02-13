@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fileRoutes = require('./routes/fileRoutes');
+const imgScrollRoutes = require('./routes/imgScrollRoutes');
 
 const app = express();
 
@@ -29,6 +30,9 @@ app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 使用文件路由
 app.use('/api', fileRoutes);
+
+// 添加新的路由
+app.use('/api', imgScrollRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
