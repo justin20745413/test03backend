@@ -1,5 +1,5 @@
 {
-  "webColor": "COLOR_C",
+  "isCentral": true,
   "indexPartList": [
     {
       "indexPartId": 1,
@@ -39,7 +39,7 @@
       "status": "ENABLE",
       "customName": "宣傳服務",
       "indexPartStyle": "STYLE_B",
-      "isCentral": false
+      "isCentral": true
     }
   ]
 }

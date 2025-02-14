@@ -192,7 +192,28 @@ const imgScrollController = {
                 });
             }
         }
-    ]
+    ],
+
+    // 添加更新權限的方法
+    updatePermission: async (req, res) => {
+        try {
+            const { isCentral } = req.body;
+            const data = JSON.parse(await fs.readFile(dataPath, 'utf8'));
+            
+            // 更新權限
+            data.isCentral = isCentral;
+            
+            await fs.writeFile(dataPath, JSON.stringify(data, null, 2));
+            
+            res.json({ 
+                success: true, 
+                message: '權限更新成功',
+                data 
+            });
+        } catch (error) {
+            res.status(500).json({ error: '更新權限失敗' });
+        }
+    }
 };
 
 module.exports = imgScrollController; 
